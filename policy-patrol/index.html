@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Policy Patrol - Learn Google Play Policies</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .game-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 24px 48px rgba(0,0,0,0.15);
+            max-width: 420px;
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .header {
+            background: #1976d2;
+            color: white;
+            padding: 24px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        .score-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .app-card {
+            padding: 24px;
+            position: relative;
+            transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        
+        .app-card.swipe-left {
+            transform: translateX(-100%) rotate(-15deg);
+        }
+        
+        .app-card.swipe-right {
+            transform: translateX(100%) rotate(15deg);
+        }
+        
+        .app-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(45deg, #4caf50, #2196f3);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            margin: 0 auto 16px;
+        }
+        
+        .app-name {
+            font-size: 20px;
+            font-weight: 500;
+            text-align: center;
+            margin-bottom: 8px;
+            color: #212121;
+        }
+        
+        .app-category {
+            text-align: center;
+            color: #757575;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+        
+        .app-description {
+            background: #f5f5f5;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            line-height: 1.5;
+            color: #424242;
+        }
+        
+        .hint-card {
+            perspective: 1000px;
+            height: 120px;
+            margin-bottom: 16px;
+        }
+        
+        .hint-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+        
+        .hint-card.flipped .hint-card-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .hint-card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
+        
+        .hint-card-front {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .hint-card-back {
+            background: #fff3e0;
+            border: 2px solid #ff9800;
+            transform: rotateY(180deg);
+            overflow-y: auto;
+        }
+        
+        .hint-title {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+        
+        .hint-subtitle {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        
+        .hint-content {
+            font-size: 12px;
+            line-height: 1.4;
+            color: #e65100;
+            text-align: left;
+            width: 100%;
+        }
+        
+        .permission-list {
+            list-style: none;
+            padding: 0;
+            margin: 8px 0;
+        }
+        
+        .permission-item {
+            background: rgba(0,0,0,0.1);
+            padding: 4px 8px;
+            margin: 2px 0;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 10px;
+        }
+        
+        .metadata-info {
+            background: rgba(0,0,0,0.1);
+            padding: 8px;
+            border-radius: 4px;
+            margin: 4px 0;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-around;
+            padding: 24px;
+            background: #fafafa;
+        }
+        
+        .control-btn {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .reject-btn {
+            background: #fe8a8a;
+            color: white;
+        }
+        
+        .approve-btn {
+            background: #4caf50;
+            color: white;
+        }
+        
+        .control-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+        
+        .feedback {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.9);
+            color: white;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            text-align: center;
+        }
+        
+        .feedback.show {
+            display: flex;
+        }
+        
+        .feedback-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+        
+        .feedback-title {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        .feedback-explanation {
+            line-height: 1.5;
+            margin-bottom: 24px;
+            opacity: 0.9;
+        }
+        
+        .next-btn {
+            background: #2196f3;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 24px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        .correct {
+            color: #4caf50;
+        }
+        
+        .incorrect {
+            color: #f44336;
+        }
+        
+        .game-over {
+            text-align: center;
+            padding: 48px 24px;
+        }
+        
+        .final-score {
+            font-size: 48px;
+            font-weight: 300;
+            color: #1976d2;
+            margin-bottom: 16px;
+        }
+        
+        .restart-btn {
+            background: #1976d2;
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 24px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            margin-top: 24px;
+        }
+        
+        .warning-text {
+            color: #f44336;
+            font-weight: 500;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="header">
+            <h1>Policy Patrol</h1>
+            <div class="score-info">
+                <span>Score: <span id="score">3</span></span>
+                <span>App: <span id="current-app">1</span>/10</span>
+            </div>
+        </div>
+        
+        <div id="game-area">
+            <div class="app-card" id="app-card">
+                <div class="app-icon" id="app-icon">📱</div>
+                <div class="app-name" id="app-name">Loading...</div>
+                <div class="app-category" id="app-category">Category</div>
+                <div class="app-description" id="app-description">
+                    App description will appear here...
+                </div>
+                <div class="app-metadata" id="app-metadata">
+                    Metadata will appear here...
+                </div>
+                
+                <div class="hint-card" id="hint-card" onclick="flipHint()">
+                    <div class="hint-card-inner">
+                        <div class="hint-card-face hint-card-front">
+                            <div class="hint-title">🔍 Inspector Hint</div>
+                            <div class="hint-subtitle">Tap to reveal details (-1 point)</div>
+                            <div class="warning-text" id="score-warning" style="display: none;">
+                                Warning: Score will drop to 0!
+                            </div>
+                        </div>
+                        <div class="hint-card-face hint-card-back">
+                            <div class="hint-content" id="hint-content">
+                                Hint details will appear here...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="controls">
+                <button class="control-btn reject-btn" onclick="reviewApp(false)">
+                    ❌
+                </button>
+                <button class="control-btn approve-btn" onclick="reviewApp(true)">
+                    ✅
+                </button>
+            </div>
+        </div>
+        
+        <div class="feedback" id="feedback">
+            <div class="feedback-icon" id="feedback-icon">✅</div>
+            <div class="feedback-title" id="feedback-title">Correct!</div>
+            <div class="feedback-explanation" id="feedback-explanation">
+                Explanation will appear here...
+            </div>
+            <button class="next-btn" onclick="nextApp()">Next App</button>
+        </div>
+    </div>
+
+    <script>
+        let currentAppIndex = 0;
+        let score = 3; // Start with 3 points
+        let hintRevealed = false;
+        
+        let gameApps = [
+            {
+                name: "Simple Weather",
+                icon: "🌤️",
+                category: "Weather",
+                description: "Clean and simple weather app. Get current conditions and 5-day forecasts for your area.",
+                hint: {
+                    permissions: [
+                        "android.permission.ACCESS_COARSE_LOCATION",
+                        "android.permission.INTERNET"
+                    ],
+                    metadata: "Target age: Everyone • Content rating: Everyone • Ads: None declared",
+                    notes: "App uses location only when open, has clear privacy policy link."
+                },
+                shouldApprove: true,
+                explanation: "This app has appropriate permissions for its functionality, proper metadata, provides a permissions declaration form, and follows location usage best practices.",
+                policyArea: "Compliant App"
+            },
+            {
+                name: "Photo Backup",
+                icon: "📸",
+                category: "Photography",
+                description: "Automatically backup your photos to the cloud. Never lose your precious memories again!",
+                hint: {
+                    permissions: [
+                        "android.permission.READ_EXTERNAL_STORAGE",
+                        "android.permission.CAMERA",
+                        "android.permission.READ_CONTACTS",
+                        "android.permission.ACCESS_FINE_LOCATION",
+                        "android.permission.RECORD_AUDIO"
+                    ],
+                    metadata: "Target age: Everyone • Content rating: Everyone • Privacy policy: Not provided",
+                    notes: "App accesses photos but also requests contacts, location, and microphone."
+                },
+                shouldApprove: false,
+                explanation: "Excessive permissions for a photo backup app. Why does it need contacts, location, and microphone? Also missing required privacy policy for data collection.",
+                policyArea: "Permissions & Privacy"
+            },
+            {
+                name: "Kids Learning ABC",
+                icon: "🎓",
+                category: "Education",
+                description: "Fun alphabet learning game for toddlers and preschoolers. Colorful animations and sounds!",
+                hint: {
+                    permissions: [
+                        "android.permission.INTERNET",
+                        "android.permission.ACCESS_NETWORK_STATE"
+                    ],
+                    metadata: "Target age: Ages 0-5 • Content rating: Everyone • Designed for Families: Not enrolled • Ads: Present",
+                    notes: "App targets young children but hasn't completed additional family requirements."
+                },
+                shouldApprove: false,
+                explanation: "Apps targeting children under 13 must be enrolled in the Designed for Families program and meet additional requirements for ads and data collection.",
+                policyArea: "Designed for Families"
+            },
+            {
+                name: "Fitness Tracker Pro",
+                icon: "💪",
+                category: "Health & Fitness",
+                description: "Track workouts, monitor heart rate, and achieve your fitness goals with our comprehensive fitness app.",
+                hint: {
+                    permissions: [
+                        "android.permission.BODY_SENSORS",
+                        "android.permission.ACTIVITY_RECOGNITION",
+                        "android.permission.ACCESS_FINE_LOCATION",
+                        "android.permission.INTERNET"
+                    ],
+                    metadata: "Target age: Teen+ • Content rating: Everyone • Privacy policy: Provided • Health data handling: Declared",
+                    notes: "Appropriate permissions for fitness tracking, proper health data disclosures."
+                },
+                shouldApprove: true,
+                explanation: "All permissions are justified for fitness tracking functionality. Has proper privacy policy and health data handling disclosures.",
+                policyArea: "Compliant App"
+            },
+            {
+                name: "Super Speed Booster",
+                icon: "🚀",
+                category: "Tools",
+                description: "Boost your phone performance by 500%! Clean junk files, optimize RAM, and extend battery life instantly.",
+                hint: {
+                    permissions: [
+                        "android.permission.KILL_BACKGROUND_PROCESSES",
+                        "android.permission.PACKAGE_USAGE_STATS",
+                        "android.permission.SYSTEM_ALERT_WINDOW",
+                        "android.permission.WRITE_SETTINGS"
+                    ],
+                    metadata: "Target age: Everyone • Content rating: Everyone • Developer: NewAccount2024 (0 other apps)",
+                    notes: "Claims 500% performance improvement, requests system-level permissions."
+                },
+                shouldApprove: false,
+                explanation: "Makes misleading claims about performance improvements that can't be substantiated. Many requested permissions don't actually provide the claimed functionality.",
+                policyArea: "Deceptive Behavior"
+            },
+            {
+                name: "Daily News Reader",
+                icon: "📰",
+                category: "News & Magazines",
+                description: "Stay informed with breaking news from trusted sources. Personalized news feed based on your interests.",
+                hint: {
+                    permissions: [
+                        "android.permission.INTERNET",
+                        "android.permission.ACCESS_NETWORK_STATE",
+                        "android.permission.WAKE_LOCK"
+                    ],
+                    metadata: "Target age: Teen+ • Content rating: Everyone • Privacy policy: Provided • Content sources: Reuters, AP, BBC",
+                    notes: "Standard permissions for news app, legitimate content sources listed."
+                },
+                shouldApprove: true,
+                explanation: "Appropriate permissions for a news app, has proper privacy policy, and lists legitimate news sources.",
+                policyArea: "Compliant App"
+            },
+            {
+                name: "File Manager X",
+                icon: "📁",
+                category: "Productivity",
+                description: "Powerful file management with cloud integration. Organize, share, and backup your files effortlessly.",
+                hint: {
+                    permissions: [
+                        "android.permission.READ_EXTERNAL_STORAGE",
+                        "android.permission.WRITE_EXTERNAL_STORAGE",
+                        "android.permission.READ_SMS",
+                        "android.permission.SEND_SMS",
+                        "android.permission.READ_PHONE_STATE",
+                        "android.permission.CALL_PHONE"
+                    ],
+                    metadata: "Target age: Everyone • Content rating: Everyone • Privacy policy: Provided",
+                    notes: "File manager requesting SMS and phone permissions unnecessarily."
+                },
+                shouldApprove: false,
+                explanation: "File managers should not need SMS or phone call permissions. These permissions aren't related to core file management functionality.",
+                policyArea: "Permissions & Privacy"
+            },
+            {
+                name: "Meditation & Sleep",
+                icon: "🧘",
+                category: "Health & Fitness",
+                description: "Guided meditation and sleep stories to help you relax and get better rest. Premium subscription available.",
+                hint: {
+                    permissions: [
+                        "android.permission.INTERNET",
+                        "android.permission.ACCESS_NETWORK_STATE",
+                        "android.permission.RECORD_AUDIO"
+                    ],
+                    metadata: "Target age: Everyone • Content rating: Everyone • Privacy policy: Provided • Subscription: $4.99/month",
+                    notes: "Audio permission for meditation recording feature, transparent pricing."
+                },
+                shouldApprove: true,
+                explanation: "Permissions are appropriate for meditation app features. Has proper privacy policy and transparent subscription pricing.",
+                policyArea: "Compliant App"
+            },
+            {
+                name: "Crypto Mining Mobile",
+                icon: "⛏️",
+                category: "Finance",
+                description: "Mine cryptocurrency directly on your mobile device. Earn Bitcoin, Ethereum, and other coins 24/7.",
+                hint: {
+                    permissions: [
+                        "android.permission.INTERNET",
+                        "android.permission.ACCESS_NETWORK_STATE",
+                        "android.permission.WAKE_LOCK",
+                        "android.permission.DISABLE_KEYGUARD"
+                    ],
+                    metadata: "Target age: Teen+ • Content rating: Everyone • Privacy policy: Provided",
+                    notes: "App designed to run continuously for cryptocurrency mining on mobile device."
+                },
+                shouldApprove: false,
+                explanation: "Google Play prohibits apps that mine cryptocurrency on devices due to excessive battery drain, device overheating, and poor user experience.",
+                policyArea: "Prohibited Content"
+            },
+            {
+                name: "Recipe Organizer",
+                icon: "👨‍🍳",
+                category: "Food & Drink",
+                description: "Organize your favorite recipes, create meal plans, and generate shopping lists. Share recipes with family.",
+                hint: {
+                    permissions: [
+                        "android.permission.INTERNET",
+                        "android.permission.ACCESS_NETWORK_STATE",
+                        "android.permission.CAMERA"
+                    ],
+                    metadata: "Target age: Everyone • Content rating: Everyone • Privacy policy: Provided • Features: Photo capture for recipes",
+                    notes: "Camera permission for taking photos of prepared dishes, reasonable functionality."
+                },
+                shouldApprove: true,
+                explanation: "All permissions are justified - camera for recipe photos, internet for sharing. Proper privacy policy provided.",
+                policyArea: "Compliant App"
+            }
+        ];
+
+        function loadApp(index) {
+            if (index >= gameApps.length) {
+                showGameOver();
+                return;
+            }
+
+            const app = gameApps[index];
+            document.getElementById('app-icon').textContent = app.icon;
+            document.getElementById('app-name').textContent = app.name;
+            document.getElementById('app-category').textContent = app.category;
+            document.getElementById('app-description').textContent = app.description;
+
+            let permissionsList = app.hint.permissions.map(p => `<div class="permission-item">${p}</div>`).join('');
+            document.getElementById('app-metadata').innerHTML = `
+                <div><strong>📋 Permissions Requested:</strong></div>
+                <div class="permission-list">${permissionsList}</div>
+                <div class="metadata-info"><strong>📊 Store Metadata:</strong><br>${app.hint.metadata}</div>
+            `;
+
+            // Setup hint content
+            const hintContent = document.getElementById('hint-content');
+            
+            hintContent.innerHTML = `
+                
+                <div style="margin-top: 8px;"><strong>🔍 Inspector Notes:</strong><br>${app.hint.notes}</div>
+            `;
+            
+            document.getElementById('current-app').textContent = index + 1;
+            
+            // Reset card and hint state
+            const card = document.getElementById('app-card');
+            const hintCard = document.getElementById('hint-card');
+            card.classList.remove('swipe-left', 'swipe-right');
+            hintCard.classList.remove('flipped');
+            hintRevealed = false;
+            
+            // Update score warning
+            updateScoreWarning();
+        }
+
+        function updateScoreWarning() {
+            const warning = document.getElementById('score-warning');
+            if (score <= 1) {
+                warning.style.display = 'block';
+            } else {
+                warning.style.display = 'none';
+            }
+        }
+
+        function flipHint() {
+            if (hintRevealed) return;
+            
+            if (score <= 0) {
+                showGameOver();
+                return;
+            }
+            
+            score--;
+            document.getElementById('score').textContent = score;
+            document.getElementById('hint-card').classList.add('flipped');
+            hintRevealed = true;
+            updateScoreWarning();
+            
+            if (score <= 0) {
+                setTimeout(() => {
+                    showGameOver();
+                }, 1000);
+            }
+        }
+
+        function reviewApp(approved) {
+            const app = gameApps[currentAppIndex];
+            const isCorrect = approved === app.shouldApprove;
+            
+            if (isCorrect) {
+                score++;
+                document.getElementById('score').textContent = score;
+            } else {
+                score--;
+                document.getElementById('score').textContent = score;
+                if (score < 0) {
+                    setTimeout(() => {
+                        showGameOver();
+                    }, 300);
+                    return;
+                }
+            }
+            
+            // Animate card
+            const card = document.getElementById('app-card');
+            if (approved) {
+                card.classList.add('swipe-right');
+            } else {
+                card.classList.add('swipe-left');
+            }
+            
+            // Show feedback after animation
+            setTimeout(() => {
+                showFeedback(isCorrect, app);
+            }, 300);
+        }
+
+        function showFeedback(isCorrect, app) {
+            const feedback = document.getElementById('feedback');
+            const icon = document.getElementById('feedback-icon');
+            const title = document.getElementById('feedback-title');
+            const explanation = document.getElementById('feedback-explanation');
+            
+            if (isCorrect) {
+                icon.textContent = '✅';
+                title.textContent = 'Correct!';
+                title.className = 'feedback-title correct';
+            } else {
+                icon.textContent = '❌';
+                title.textContent = 'Not quite right';
+                title.className = 'feedback-title incorrect';
+            }
+            
+            explanation.innerHTML = `
+                <strong>Policy Area:</strong> ${app.policyArea}<br><br>
+                <strong>Explanation:</strong> ${app.explanation}
+            `;
+            
+            feedback.classList.add('show');
+        }
+
+        function nextApp() {
+            document.getElementById('feedback').classList.remove('show');
+            currentAppIndex++;
+            loadApp(currentAppIndex);
+        }
+
+        function showGameOver() {
+            const gameArea = document.getElementById('game-area');
+            let message = '';
+            let emoji = '';
+            
+            if (score < 0) {
+                message = 'Game Over! Your score dropped below zero.';
+                emoji = '💥';
+            } else {
+                const percentage = Math.round((score / (gameApps.length + 3)) * 100); // +3 for starting points
+                if (percentage >= 80) {
+                    message = 'Excellent! You\'re ready to review apps on Google Play!';
+                    emoji = '🌟';
+                } else if (percentage >= 60) {
+                    message = 'Good job! You understand most of the key policies.';
+                    emoji = '👍';
+                } else {
+                    message = 'Keep learning! Review the policies and try again.';
+                    emoji = '📚';
+                }
+            }
+            
+            gameArea.innerHTML = `
+                <div class="game-over">
+                    <div style="font-size: 64px; margin-bottom: 16px;">${emoji}</div>
+                    <div class="final-score">${Math.max(0, score)}</div>
+                    <h2>Game Complete!</h2>
+                    <p>${message}</p>
+                    <button class="restart-btn" onclick="restartGame()">Play Again</button>
+                </div>
+            `;
+        }
+
+        function restartGame() {
+            currentAppIndex = 0;
+            score = 3;
+            hintRevealed = false;
+            document.getElementById('score').textContent = '3';
+            
+            // Reset game area
+            document.getElementById('game-area').innerHTML = `
+                <div class="app-card" id="app-card">
+                    <div class="app-icon" id="app-icon">📱</div>
+                    <div class="app-name" id="app-name">Loading...</div>
+                    <div class="app-category" id="app-category">Category</div>
+                    <div class="app-description" id="app-description">
+                        App description will appear here...
+                    </div>
+                    <div class="app-metadata" id="app-metadata">
+                        Metadata will appear here...
+                    </div>
+                    
+                    <div class="hint-card" id="hint-card" onclick="flipHint()">
+                        <div class="hint-card-inner">
+                            <div class="hint-card-face hint-card-front">
+                                <div class="hint-title">🔍 Inspector Hint</div>
+                                <div class="hint-subtitle">Tap to reveal details (-1 point)</div>
+                                <div class="warning-text" id="score-warning" style="display: none;">
+                                    Warning: Score will drop to 0!
+                                </div>
+                            </div>
+                            <div class="hint-card-face hint-card-back">
+                                <div class="hint-content" id="hint-content">
+                                    Hint details will appear here...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="controls">
+                    <button class="control-btn reject-btn" onclick="reviewApp(false)">
+                        ❌
+                    </button>
+                    <button class="control-btn approve-btn" onclick="reviewApp(true)">
+                        ✅
+                    </button>
+                </div>
+            `;
+            
+            loadApp(0);
+        }
+
+        // Initialize game
+        loadApp(0);
+    </script>
+</body>
+</html>
