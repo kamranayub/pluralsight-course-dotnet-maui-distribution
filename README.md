@@ -8,6 +8,7 @@ This repository is for the Pluralsight course Distributing .NET MAUI Apps. The l
 ## Table of Contents
 
 1. [Demo App](#demo-app)
+1. [Policy Patrol Game](#policy-patrol-game)
 1. [Errata](#errata)
 1. [Updates](#updates)
 1. [Additional Resources](#additional-resources)
