@@ -39,3 +39,5 @@ Please report course issues using the [Issues](issues) page or the Pluralsight d
   - Initial release 🎉
 
 ## Additional Resources
+
+- Companion Course: [Testing .NET MAUI Apps](https://github.com/kamranayub/pluralsight-course-dotnet-maui-testing)
