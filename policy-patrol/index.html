@@ -161,7 +161,7 @@
         }
         
         .hint-content {
-            font-size: 12px;
+            font-size: 14px;
             line-height: 1.4;
             color: #e65100;
             text-align: left;
@@ -180,7 +180,7 @@
             margin: 2px 0;
             border-radius: 4px;
             font-family: monospace;
-            font-size: 10px;
+            font-size: 14px;
         }
         
         .metadata-info {
@@ -390,10 +390,10 @@
                         "android.permission.INTERNET"
                     ],
                     metadata: "Target age: Everyone • Content rating: Everyone • Ads: None declared",
-                    notes: "App uses location only when open, has clear privacy policy link."
+                    notes: "App uses location only when open, provides a permissions declaration form, and has a clear privacy policy link."
                 },
                 shouldApprove: true,
-                explanation: "This app has appropriate permissions for its functionality, proper metadata, provides a permissions declaration form, and follows location usage best practices.",
+                explanation: "This app has appropriate permissions for its functionality, proper metadata, and follows location usage best practices.",
                 policyArea: "Compliant App"
             },
             {
@@ -424,14 +424,15 @@
                 hint: {
                     permissions: [
                         "android.permission.INTERNET",
-                        "android.permission.ACCESS_NETWORK_STATE"
+                        "android.permission.ACCESS_NETWORK_STATE",
+                        "android.permission.AD_ID"
                     ],
-                    metadata: "Target age: Ages 0-5 • Content rating: Everyone • Designed for Families: Not enrolled • Ads: Present",
-                    notes: "App targets young children but hasn't completed additional family requirements."
+                    metadata: "Target age: Ages 0-5 • Content rating: Everyone • Ads: Present",
+                    notes: "App targets young children but is transmitting Advertising ID."
                 },
                 shouldApprove: false,
-                explanation: "Apps targeting children under 13 must be enrolled in the Designed for Families program and meet additional requirements for ads and data collection.",
-                policyArea: "Designed for Families"
+                explanation: "Apps solely targeted to children should transmit or request the Advertising ID permission.",
+                policyArea: "Google Play Families Policy"
             },
             {
                 name: "Fitness Tracker Pro",
@@ -445,7 +446,7 @@
                         "android.permission.ACCESS_FINE_LOCATION",
                         "android.permission.INTERNET"
                     ],
-                    metadata: "Target age: Teen+ • Content rating: Everyone • Privacy policy: Provided • Health data handling: Declared",
+                    metadata: "Target age: Teen+ • Content rating: Everyone • Privacy policy: Comprehensive • Health apps declaration: Provided",
                     notes: "Appropriate permissions for fitness tracking, proper health data disclosures."
                 },
                 shouldApprove: true,
@@ -504,7 +505,7 @@
                         "android.permission.CALL_PHONE"
                     ],
                     metadata: "Target age: Everyone • Content rating: Everyone • Privacy policy: Provided",
-                    notes: "File manager requesting SMS and phone permissions unnecessarily."
+                    notes: "Phone state and SMS permissions are categorized as 'dangerous'."
                 },
                 shouldApprove: false,
                 explanation: "File managers should not need SMS or phone call permissions. These permissions aren't related to core file management functionality.",
@@ -559,7 +560,7 @@
                         "android.permission.CAMERA"
                     ],
                     metadata: "Target age: Everyone • Content rating: Everyone • Privacy policy: Provided • Features: Photo capture for recipes",
-                    notes: "Camera permission for taking photos of prepared dishes, reasonable functionality."
+                    notes: "Camera permission for taking photos of prepared dishes."
                 },
                 shouldApprove: true,
                 explanation: "All permissions are justified - camera for recipe photos, internet for sharing. Proper privacy policy provided.",
