@@ -14,9 +14,17 @@ This repository is for the Pluralsight course Distributing .NET MAUI Apps. The l
 
 ## Demo App
 
-This course repository holds the source files used for the clip demos, which you can reference. 
+This course repository holds the source files used for the clip demos in the [Releases](releases) section, which you can reference. 
 
 The demo app may have received updates over time since it was published in the app stores.
+
+## Policy Patrol Game
+
+Learn some key Google Play policies by pretending to be an app reviewer:
+
+https://kamranayub.github.io/pluralsight-course-dotnet-maui-distribution/policy-patrol
+
+The game works offline, just open the `index.html` file, or use `npx serve policy-patrol` if using Node.js.
 
 ## Errata
 
