@@ -1,9 +1,12 @@
 # Distributing .NET MAUI Apps Pluralsight Course
 
-This repository is for the Pluralsight course Distributing .NET MAUI Apps. The license is Apache 2.0.
+This repository is for the Pluralsight course [Distributing .NET MAUI Apps](https://www.pluralsight.com/courses/dot-net-maui-apps-distributing). The license is Apache 2.0.
 
-<!-- [![Course overview screenshot]($COURSE_HERO_IMAGE$)]($COURSE_LINK$) -->
+[![Course overview](https://github.com/user-attachments/assets/23c2d6b2-4d00-4d91-a406-7d1d7e3e8c28)](https://www.pluralsight.com/courses/dot-net-maui-apps-distributing)
 
+## What You'll Learn
+
+> Native app distribution can be a complex and daunting task. In this course, Distributing .NET MAUI Apps, you’ll learn to prepare your application and distribute it across multiple platforms. First, you’ll explore what steps to take to prepare your app for cross-platform deployment. Next, you’ll discover how to package, sign, and publish your app for testing or ad-hoc distribution. Finally, you’ll learn the step-by-step process to distribute your app through the Apple and Google Play app stores. When you’re finished with this course, you’ll have the skills and knowledge of .NET MAUI app deployment needed to distribute polished, production-ready apps.
 
 ## Table of Contents
 
