@@ -8,7 +8,9 @@ $CommonPaths = @(
     ".\README.md"
 )
 
-# Example: Module 1
-Compress-Archive -DestinationPath .\.materials\Module-1.zip -Update -Path ($CommonPaths + @(
-    ".\Module 1"
+Compress-Archive -DestinationPath .\.materials\exercise-files.zip -Update -Path ($CommonPaths + @(
+    ".\M3",
+    ".\M5",
+    ".\policy-patrol",
+    ".\demos-0fe1ef5.zip"
 ))
